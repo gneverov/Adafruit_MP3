@@ -45,6 +45,7 @@
 #include "coder.h"
 #include "assembly.h"
 #include <stdint.h>
+#include "supervisor/linker.h"
 
 /**************************************************************************************
  * Function:    AntiAlias
@@ -70,8 +71,7 @@
  *                (should be guaranteed from dequant, and max gain from stproc * max 
  *                 gain from AntiAlias < 2.0)
  **************************************************************************************/
-// a little bit faster in RAM (< 1 ms per block)
-/* __attribute__ ((section (".data"))) */ static void AntiAlias(int *x, int nBfly)
+static void PLACE_IN_ITCM(AntiAlias)(int *x, int nBfly)
 {
 	int k, a0, b0, c0, c1;
 	const int *c;
@@ -718,8 +718,7 @@ static int HybridTransform(int *xCurr, int *xPrev, int y[BLOCK_SIZE][NBANDS], Si
  *
  * Return:      0 on success,  -1 if null input pointers
  **************************************************************************************/
- // a bit faster in RAM
-/*__attribute__ ((section (".data")))*/ int IMDCT(MP3DecInfo *mp3DecInfo, int gr, int ch)
+int PLACE_IN_ITCM(IMDCT)(MP3DecInfo *mp3DecInfo, int gr, int ch)
 {
 	int nBfly, blockCutoff;
 	FrameHeader *fh;

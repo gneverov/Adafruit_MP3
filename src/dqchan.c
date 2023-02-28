@@ -44,6 +44,7 @@
 #include "coder.h"
 #include "assembly.h"
 #include <stdint.h>
+#include "supervisor/linker.h"
 
 typedef int ARRAY3[3];	/* for short-block reordering */
 
@@ -130,7 +131,7 @@ static const int pow2frac[8] = {
  *
  * Return:      bitwise-OR of the unsigned outputs (for guard bit calculations)
  **************************************************************************************/
-/*__attribute__ ((section (".data")))*/ static int DequantBlock(int *inbuf, int *outbuf, int num, int scale)
+static int PLACE_IN_ITCM(DequantBlock)(int *inbuf, int *outbuf, int num, int scale)
 {
 	int tab4[4];
 	int scalef, scalei, shift;
@@ -242,7 +243,7 @@ static const int pow2frac[8] = {
  *
  * Notes:       dequantized samples in Q(DQ_FRACBITS_OUT) format 
  **************************************************************************************/
-/*__attribute__ ((section (".data")))*/ int DequantChannel(int *sampleBuf, int *workBuf, int *nonZeroBound, FrameHeader *fh, SideInfoSub *sis, 
+int PLACE_IN_ITCM(DequantChannel)(int *sampleBuf, int *workBuf, int *nonZeroBound, FrameHeader *fh, SideInfoSub *sis, 
 					ScaleFactorInfoSub *sfis, CriticalBandInfo *cbi)
 {
 	int i, j, w, cb;
