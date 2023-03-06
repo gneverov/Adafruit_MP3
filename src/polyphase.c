@@ -47,6 +47,7 @@
 
 #include "coder.h"
 #include "assembly.h"
+#include "supervisor/linker.h"
 
 /* input to Polyphase = Q(DQ_FRACBITS_OUT-2), gain 2 bits in convolution
  *  we also have the implicit bias of 2^15 to add back, so net fraction bits = 
@@ -109,7 +110,7 @@ static __inline short ClipToShort(int x, int fracBits)
  * TODO:        add 32-bit version for platforms where 64-bit mul-acc is not supported
  *                (note max filter gain - see polyCoef[] comments)
  **************************************************************************************/
-void PolyphaseMono(short *pcm, int *vbuf, const int *coefBase)
+void PLACE_IN_ITCM(PolyphaseMono)(short *pcm, int *vbuf, const int *coefBase)
 {	
 	int i;
 	const int *coef;
@@ -231,7 +232,7 @@ void PolyphaseMono(short *pcm, int *vbuf, const int *coefBase)
  *
  * TODO:        add 32-bit version for platforms where 64-bit mul-acc is not supported
  **************************************************************************************/
-void PolyphaseStereo(short *pcm, int *vbuf, const int *coefBase)
+void PLACE_IN_ITCM(PolyphaseStereo)(short *pcm, int *vbuf, const int *coefBase)
 {
 	int i;
 	const int *coef;
